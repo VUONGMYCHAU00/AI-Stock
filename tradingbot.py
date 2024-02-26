@@ -21,13 +21,31 @@ ALPACA_CREDS = {
     "API_KEY": API_KEY,
     "API_SECRET": API_SECRET,
     "PAPER": True
-}
+} 
 
 class MLTrader(Strategy): ##tạo thành xương sống cho bot giao dịch##
     def initialize(self, symbol:str="SPY"):
         self.symbol = symbol
+        self.sleeptime = "24H"
+        self.last_trade = None
+
+        ##bên B
+    def position_sizing(self):
+        cash = self.get_cash()
+        last_price = self.get_last_price (self.symbol)
+
+
+
     def on_trading_iteration(self):##phương thức lập giao dịch##
-        pass
+        if self.last_trade == None:
+            order = self.create_order(
+                self.symbol,
+                10,
+                "buy",
+                type="market"
+            )
+            self.submit_order(order)
+            self.last_trade = "buy"
 
 ## Tạo ngày bắt đầu và ngày kết thúc##
 start_date = datetime(2023,12,15)
